@@ -2,7 +2,7 @@
 # Autumn 2015
 #
 
-TARGET =	lab1
+TARGET =	LSGL
 
 SHELL =		/bin/sh
 OS =		$(shell uname -s)

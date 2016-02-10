@@ -204,7 +204,7 @@ void LSystem::PullShape () {
 				// Note: The current rotation is included, and would not affect the starting point.
 				// Start point.
 				float scale = 1.5f;
-				vec4f offsetL = scale * vec4f(1.0f, 0.0f, 0.0f, 1.0f);
+				vec4f offsetL = vec4f(1.0f, 0.0f, 0.0f, 1.0f);
 
 				vec4f startP = this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f);
 				this->_verts.push_back( vec3f(startP) );
@@ -266,6 +266,7 @@ void LSystem::Draw () {
 
 	this->UpdateVBO();
 	for (auto it = this->_verts.begin(); it != this->_verts.end();  ++it) {
+		*it = 3.0f * (*it);
 		cout << *it << endl;
 	}
 

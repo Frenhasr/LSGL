@@ -10,14 +10,24 @@
 #include "triangle.hxx" 
 #include "Lsystem.hxx" 
 #include "axes.hxx"
+using 		namespace std; 
+using 		namespace cs237; 
 
-struct View 
-{
+enum RenderMode {
+	WIREFRAME = 0,	//!< render scene as a wireframe
+	NUM_RENDER_MODES	//!< == to the number of rendering modes
+};
+
+enum AXES {
+	X_AXIS = 0,	
+	Y_AXIS,	
+	Z_AXIS	
+};
+
+struct View {
 	public:
+		GLFWwindow		*win;		//!< the application window
 		cs237::ShaderProgram  * shader;			//!< the shader program for triangle 
-		cs237::vec3f 	camPos;   					//!< camera position in world space 
-    	cs237::vec3f 	camDir;					//!< camera direction in world space
-		cs237::vec3f 	camUp;    					//!< camera up vector in world space 
 		
 		cs237::mat4f 	camera; 					//!< the camera matrix 
 		cs237::mat4f 	projectionMat; 			//!< the projection matrix  
@@ -30,7 +40,22 @@ struct View
 		int 			width, height; 						//!< window dimensions
 		
 		/*! \brief Initialize the view */ 
-		void Init(int w, int h); 					
+		View(int w, int h, GLFWwindow* win); 		
+
+		/* rotate the camera around the look-at point by the given angle (in degrees) */
+		void RotateLeft (float angle);
+
+		/*! rotate the camera up by the given angle (in degrees) */
+		void RotateUp (float angle);
+
+	  /*! move the camera towards the look-at point by the given distance */
+		void Move (float dist);		
+
+		void VTranspose (AXES axis, int mode);
+
+		void VRotate (AXES axis, int mode);
+
+		void upAxis();
 
 		/*! \brief init triangle mesh */
 		void InitTriangle();  
@@ -42,19 +67,31 @@ struct View
     	void InitProjMatrix ();
 
   		/*! \brief initialize the camera matrix based on the view state. */
-    	void InitCamera ();
+    	void InitViewMatrix ();
 
 		/*! \brief renders the triangle to the screen */
-		void Render(); 
+		void Render();
+
+		void BindFramebuffer();
+
+		bool			needsRedraw;
+		bool			drawAxes;	//!< draw the axes when true
+		float 			stepsize;
 
 	private:
 		LSystem* 		tree;
 
 		class Axes		*axes;		//!< for drawing the world-space axes
-		bool			drawAxes;	//!< draw the axes when true
 
 		
-		cs237::mat4f	camRot;		//!< cumlative camera rotation
+		vec3f 			camPos;   					//!< camera position in world space 
+    	vec3f 			camAt;					//!< camera direction in world space
+		vec3f 			camUp;    					//!< camera up vector in world space 
+
+		mat4f 			viewMat;
+		mat4f 			projMat;
+
+		mat4f			camRot;		//!< cumlative camera rotation
 		float			camOffset;	//!< offset for camera from initial distance to lookAt point.
 		float			minOffset;	//!< minimum allowed offset
 		float			maxOffset;	//!< maximum allowed offset
