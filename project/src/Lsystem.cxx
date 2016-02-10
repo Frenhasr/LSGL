@@ -19,14 +19,9 @@ LSystem::LSystem (
 	// derivations 	= new vector<string> ();
 	// turtleTMat	 	= new vector<cs237::mat4f> ();
 
-	this->tState = translate(vec3f(0.0f, 0.0f, 0.0f));
-	this->tPush();
-
 	derivations.push_back(this->axiom);
 	this->DevelopAxiom();
 
-	this->_verts.clear();
-	this->_colors.clear();
 	this->PullShape();
 
 	CS237_CHECK( glGenVertexArrays (1, &this->_vaoId) );
@@ -57,9 +52,6 @@ LSystem::~LSystem () {
 
 void LSystem::UpdateVBO ()
 {
-
-	this->_verts.clear();
-	this->_colors.clear();
     this->PullShape();
 
 	CS237_CHECK( glBindVertexArray (this->_vaoId) );
@@ -76,11 +68,15 @@ void LSystem::UpdateVBO ()
  */
 void LSystem::tPush () {
 	this->tStateStack.push_back(this->tState);
+	this->tOrientationStack.push_back(this->tOrientation);
 }
 
 void LSystem::tPop () {
 	this->tState = this->tStateStack.back();
 	this->tStateStack.pop_back();
+
+	this->tOrientation = this->tOrientationStack.back();
+	this->tOrientationStack.pop_back();
 }
 
 /* DEVELOP AXIOM
@@ -165,6 +161,17 @@ string LSystem::GrabDerivationM (
  */
 void LSystem::PullShape () {
 
+	this->_verts.clear();
+	this->_colors.clear();
+
+	this->tStateStack.clear();
+	this->tOrientationStack.clear();
+
+	this->tState = scale(1.0f);
+	this->tOrientation = quatf(0.0, vec3f(0.0f, 0.0f, 0.0f));
+
+	this->tPush();
+
 	/* NOTES:
 		- pop push.  *** DONE
 		- Secondary dictionary of output rules.
@@ -193,32 +200,25 @@ void LSystem::PullShape () {
 			 * 		V 	-> 	leaf
 			 */
 			case 'X':
-			case 'Y':
+			case 'Y': {
 				// Note: The current rotation is included, and would not affect the starting point.
 				// Start point.
-				this->_verts.push_back(vec3f(this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f)));
+				float scale = 1.5f;
+				vec4f offsetL = scale * vec4f(1.0f, 0.0f, 0.0f, 1.0f);
+
+				vec4f startP = this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f);
+				this->_verts.push_back( vec3f(startP) );
 				// End point.
-				this->_verts.push_back(vec3f(this->tState * 2.0f * normalize(vec4f(1.0f, 1.0f, 1.0f, 1.0f))));
+				vec4f endP =  this->tState * this->tOrientation.toMat4x4() * offsetL;
+				this->_verts.push_back( vec3f(endP) );
 
 				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
 				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
 
 				// Change the state to the new turtle position.
-				this->tState = this->tState * translate(2.0f * normalize(vec3f(1.0f, 1.0f, 1.0f)));
+				this->tState = this->tState * translate( vec3f(endP) );
 				break;
-			// case 'V':
-			// 	// Note: The current rotation is included, and would not affect the starting point.
-			// 	// Start point.
-			// 	this->_verts.push_back(vec3f(this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f)));
-			// 	// End point.
-			// 	this->_verts.push_back(vec3f(this->tState * normalize(vec4f(1.0f, 1.0f, 1.0f, 1.0f))));
-				
-			// 	this->_colors.push_back(vec3f(1.0f, 0.0f, 0.0f));
-			// 	this->_colors.push_back(vec3f(1.0f, 0.0f, 0.0f));
-
-			// 	this->tState *= translate(normalize(vec3f(1.0f, 1.0f, 1.0f)));
-			// 	break;
-
+			}
 			/* TURTLE ORIENTATION:
 			 *		+ 	-> 	turn left
 			 * 		- 	-> 	turn right
@@ -229,28 +229,29 @@ void LSystem::PullShape () {
 			 * 		| 	-> 	turn around
 			 */
 			case '+':
-				this->tState = this->tState * cs237::quatf(this->angle, cs237::vec3f(0.0f, 0.0f, 1.0f)).toMat4x4();
+				this->tOrientation = this->tOrientation * quatf(this->angle, vec3f(0.0f, 0.0f, 1.0f));
+				//cout << this->tOrientation << endl;
 				break;
 			case '-':
-				this->tState = this->tState * cs237::quatf(-this->angle, cs237::vec3f(0.0f, 0.0f, 1.0f)).toMat4x4();
+				this->tOrientation = this->tOrientation * quatf(-this->angle, vec3f(0.0f, 0.0f, 1.0f));
 				break;
 
 			case '&':
-				this->tState = this->tState * cs237::quatf(this->angle, cs237::vec3f(0.0f, 1.0f, 0.0f)).toMat4x4();
+				this->tOrientation = this->tOrientation * quatf(this->angle, vec3f(0.0f, 1.0f, 0.0f));
 				break;
 			case '^':
-				this->tState = this->tState * cs237::quatf(-this->angle, cs237::vec3f(0.0f, 1.0f, 0.0f)).toMat4x4();
+				this->tOrientation = this->tOrientation * quatf(-this->angle, vec3f(0.0f, 1.0f, 0.0f));
 				break;
 
 			case ':':
-				this->tState = this->tState * cs237::quatf(this->angle, cs237::vec3f(1.0f, 0.0f, 0.0f)).toMat4x4();
+				this->tOrientation = this->tOrientation * quatf(this->angle, vec3f(1.0f, 0.0f, 0.0f));
 				break;
 			case ';':
-				this->tState = this->tState * cs237::quatf(-this->angle, cs237::vec3f(1.0f, 0.0f, 0.0f)).toMat4x4();
+				this->tOrientation = this->tOrientation * quatf(-this->angle, vec3f(1.0f, 0.0f, 0.0f));
 				break;
 
 			case '|':
-				this->tState = this->tState * cs237::quatf(180.0f, cs237::vec3f(0.0f, 0.0f, 1.0f)).toMat4x4();
+				this->tOrientation = this->tOrientation * quatf(180.0f, vec3f(0.0f, 0.0f, 1.0f));
 				break;
 
 			default:
@@ -262,7 +263,14 @@ void LSystem::PullShape () {
 /* DRAW
  */
 void LSystem::Draw () {
+
+	this->UpdateVBO();
+	for (auto it = this->_verts.begin(); it != this->_verts.end();  ++it) {
+		cout << *it << endl;
+	}
+
 	std::cout << this->derivations.back() << std::endl;
+
 	CS237_CHECK( glBindVertexArray (this->_vaoId) );
 	CS237_CHECK( glDrawArrays (GL_LINES, 0, this->_verts.size()) );
 }

@@ -59,6 +59,9 @@ class LSystem {
 		mat4f 					tState;
 		vector<mat4f>			tStateStack;
 
+		quatf 					tOrientation;
+		vector<quatf> 			tOrientationStack;
+
 		GLuint 					_vaoId;
 		GLuint 					buffers[2];
 		vector<vec3f> 			_verts;

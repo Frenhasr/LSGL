@@ -9,6 +9,7 @@
 #include "cs237.hxx"
 #include "triangle.hxx" 
 #include "Lsystem.hxx" 
+#include "axes.hxx"
 
 struct View 
 {
@@ -48,5 +49,14 @@ struct View
 
 	private:
 		LSystem* 		tree;
+
+		class Axes		*axes;		//!< for drawing the world-space axes
+		bool			drawAxes;	//!< draw the axes when true
+
+		
+		cs237::mat4f	camRot;		//!< cumlative camera rotation
+		float			camOffset;	//!< offset for camera from initial distance to lookAt point.
+		float			minOffset;	//!< minimum allowed offset
+		float			maxOffset;	//!< maximum allowed offset
 }; 
 #endif /* !_VIEW_HXX_*/ 

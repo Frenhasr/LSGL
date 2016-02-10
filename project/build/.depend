@@ -1,0 +1,165 @@
+Lsystem.o: ../src/Lsystem.cxx ../src/Lsystem.hxx \
+  ../../common/include/cs237.hxx /usr/local/include/GLFW/glfw3.h \
+  ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-vec2.hxx \
+  ../../common/include/cs237-vec3.hxx \
+  ../../common/include/cs237-vec4.hxx \
+  ../../common/include/cs237-mat2x2.hxx \
+  ../../common/include/cs237-mat2x3.hxx \
+  ../../common/include/cs237-mat3x2.hxx \
+  ../../common/include/cs237-mat3x3.hxx \
+  ../../common/include/cs237-mat4x4.hxx \
+  ../../common/include/cs237-quat.hxx \
+  ../../common/include/cs237-aabb.hxx \
+  ../../common/include/cs237-color.hxx \
+  ../../common/include/cs237-transform.hxx \
+  ../../common/include/cs237-image.hxx \
+  ../../common/include/cs237-texture.hxx \
+  ../../common/include/cs237-shader.hxx \
+  ../../common/include/cs237-util.inl \
+  ../../common/include/cs237-vec2.inl \
+  ../../common/include/cs237-vec3.inl \
+  ../../common/include/cs237-vec4.inl \
+  ../../common/include/cs237-mat2x2.inl \
+  ../../common/include/cs237-mat2x3.inl \
+  ../../common/include/cs237-mat3x2.inl \
+  ../../common/include/cs237-mat3x3.inl \
+  ../../common/include/cs237-mat4x4.inl \
+  ../../common/include/cs237-quat.inl \
+  ../../common/include/cs237-aabb.inl \
+  ../../common/include/cs237-color.inl \
+  ../../common/include/cs237-shader.inl \
+  ../../common/include/cs237-sphere.hxx \
+  ../../common/include/cs237-window.hxx
+axes.o: ../src/axes.cxx ../src/axes.hxx ../../common/include/cs237.hxx \
+  /usr/local/include/GLFW/glfw3.h ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-vec2.hxx \
+  ../../common/include/cs237-vec3.hxx \
+  ../../common/include/cs237-vec4.hxx \
+  ../../common/include/cs237-mat2x2.hxx \
+  ../../common/include/cs237-mat2x3.hxx \
+  ../../common/include/cs237-mat3x2.hxx \
+  ../../common/include/cs237-mat3x3.hxx \
+  ../../common/include/cs237-mat4x4.hxx \
+  ../../common/include/cs237-quat.hxx \
+  ../../common/include/cs237-aabb.hxx \
+  ../../common/include/cs237-color.hxx \
+  ../../common/include/cs237-transform.hxx \
+  ../../common/include/cs237-image.hxx \
+  ../../common/include/cs237-texture.hxx \
+  ../../common/include/cs237-shader.hxx \
+  ../../common/include/cs237-util.inl \
+  ../../common/include/cs237-vec2.inl \
+  ../../common/include/cs237-vec3.inl \
+  ../../common/include/cs237-vec4.inl \
+  ../../common/include/cs237-mat2x2.inl \
+  ../../common/include/cs237-mat2x3.inl \
+  ../../common/include/cs237-mat3x2.inl \
+  ../../common/include/cs237-mat3x3.inl \
+  ../../common/include/cs237-mat4x4.inl \
+  ../../common/include/cs237-quat.inl \
+  ../../common/include/cs237-aabb.inl \
+  ../../common/include/cs237-color.inl \
+  ../../common/include/cs237-shader.inl \
+  ../../common/include/cs237-sphere.hxx \
+  ../../common/include/cs237-window.hxx
+main.o: ../src/main.cxx ../../common/include/cs237.hxx \
+  /usr/local/include/GLFW/glfw3.h ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-vec2.hxx \
+  ../../common/include/cs237-vec3.hxx \
+  ../../common/include/cs237-vec4.hxx \
+  ../../common/include/cs237-mat2x2.hxx \
+  ../../common/include/cs237-mat2x3.hxx \
+  ../../common/include/cs237-mat3x2.hxx \
+  ../../common/include/cs237-mat3x3.hxx \
+  ../../common/include/cs237-mat4x4.hxx \
+  ../../common/include/cs237-quat.hxx \
+  ../../common/include/cs237-aabb.hxx \
+  ../../common/include/cs237-color.hxx \
+  ../../common/include/cs237-transform.hxx \
+  ../../common/include/cs237-image.hxx \
+  ../../common/include/cs237-texture.hxx \
+  ../../common/include/cs237-shader.hxx \
+  ../../common/include/cs237-util.inl \
+  ../../common/include/cs237-vec2.inl \
+  ../../common/include/cs237-vec3.inl \
+  ../../common/include/cs237-vec4.inl \
+  ../../common/include/cs237-mat2x2.inl \
+  ../../common/include/cs237-mat2x3.inl \
+  ../../common/include/cs237-mat3x2.inl \
+  ../../common/include/cs237-mat3x3.inl \
+  ../../common/include/cs237-mat4x4.inl \
+  ../../common/include/cs237-quat.inl \
+  ../../common/include/cs237-aabb.inl \
+  ../../common/include/cs237-color.inl \
+  ../../common/include/cs237-shader.inl \
+  ../../common/include/cs237-sphere.hxx \
+  ../../common/include/cs237-window.hxx ../src/view.hxx \
+  ../src/triangle.hxx ../src/vertex.hxx ../src/Lsystem.hxx \
+  ../src/axes.hxx
+triangle.o: ../src/triangle.cxx ../src/triangle.hxx \
+  ../../common/include/cs237.hxx /usr/local/include/GLFW/glfw3.h \
+  ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-vec2.hxx \
+  ../../common/include/cs237-vec3.hxx \
+  ../../common/include/cs237-vec4.hxx \
+  ../../common/include/cs237-mat2x2.hxx \
+  ../../common/include/cs237-mat2x3.hxx \
+  ../../common/include/cs237-mat3x2.hxx \
+  ../../common/include/cs237-mat3x3.hxx \
+  ../../common/include/cs237-mat4x4.hxx \
+  ../../common/include/cs237-quat.hxx \
+  ../../common/include/cs237-aabb.hxx \
+  ../../common/include/cs237-color.hxx \
+  ../../common/include/cs237-transform.hxx \
+  ../../common/include/cs237-image.hxx \
+  ../../common/include/cs237-texture.hxx \
+  ../../common/include/cs237-shader.hxx \
+  ../../common/include/cs237-util.inl \
+  ../../common/include/cs237-vec2.inl \
+  ../../common/include/cs237-vec3.inl \
+  ../../common/include/cs237-vec4.inl \
+  ../../common/include/cs237-mat2x2.inl \
+  ../../common/include/cs237-mat2x3.inl \
+  ../../common/include/cs237-mat3x2.inl \
+  ../../common/include/cs237-mat3x3.inl \
+  ../../common/include/cs237-mat4x4.inl \
+  ../../common/include/cs237-quat.inl \
+  ../../common/include/cs237-aabb.inl \
+  ../../common/include/cs237-color.inl \
+  ../../common/include/cs237-shader.inl \
+  ../../common/include/cs237-sphere.hxx \
+  ../../common/include/cs237-window.hxx ../src/vertex.hxx
+view.o: ../src/view.cxx ../src/view.hxx ../../common/include/cs237.hxx \
+  /usr/local/include/GLFW/glfw3.h ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-vec2.hxx \
+  ../../common/include/cs237-vec3.hxx \
+  ../../common/include/cs237-vec4.hxx \
+  ../../common/include/cs237-mat2x2.hxx \
+  ../../common/include/cs237-mat2x3.hxx \
+  ../../common/include/cs237-mat3x2.hxx \
+  ../../common/include/cs237-mat3x3.hxx \
+  ../../common/include/cs237-mat4x4.hxx \
+  ../../common/include/cs237-quat.hxx \
+  ../../common/include/cs237-aabb.hxx \
+  ../../common/include/cs237-color.hxx \
+  ../../common/include/cs237-transform.hxx \
+  ../../common/include/cs237-image.hxx \
+  ../../common/include/cs237-texture.hxx \
+  ../../common/include/cs237-shader.hxx \
+  ../../common/include/cs237-util.inl \
+  ../../common/include/cs237-vec2.inl \
+  ../../common/include/cs237-vec3.inl \
+  ../../common/include/cs237-vec4.inl \
+  ../../common/include/cs237-mat2x2.inl \
+  ../../common/include/cs237-mat2x3.inl \
+  ../../common/include/cs237-mat3x2.inl \
+  ../../common/include/cs237-mat3x3.inl \
+  ../../common/include/cs237-mat4x4.inl \
+  ../../common/include/cs237-quat.inl \
+  ../../common/include/cs237-aabb.inl \
+  ../../common/include/cs237-color.inl \
+  ../../common/include/cs237-shader.inl \
+  ../../common/include/cs237-sphere.hxx \
+  ../../common/include/cs237-window.hxx ../src/triangle.hxx \
+  ../src/vertex.hxx ../src/Lsystem.hxx ../src/axes.hxx
