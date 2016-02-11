@@ -20,6 +20,9 @@ LSystem::LSystem (
 
 	this->productions['X'] = "X+Y+";
 	this->productions['Y'] = "-X-Y";
+	// this->productions['A'] = "[&FL!A];;;;;'[&FL!A]";
+	// this->productions['F'] = "S;;;;;F";
+	// this->productions['S'] = "FL";
 
 	derivations.push_back(this->axiom);
 	this->DevelopAxiom();
@@ -145,6 +148,7 @@ string LSystem::GrabDerivationM (
  * Retrieves the final derivation's vertices and colors.
  */
 void LSystem::PullShape () {
+	bool justDrew = false;
 
 	this->_verts.clear();
 	this->_colors.clear();
@@ -195,6 +199,12 @@ void LSystem::PullShape () {
 			 * 		| 	-> 	turn around
 			 */
 			case '+':
+				// if (justDrew) {
+				// 	this->tOrientation = this->tOrientationStack.back();
+				// 	this->tState = this->tStateStack.back();
+
+				// 	justDrew = !justDrew;
+				// }
 				this->tOrientation = this->tOrientation * quatf(this->angle, vec3f(0.0f, 0.0f, 1.0f));
 				break;
 			case '-':
@@ -233,10 +243,12 @@ void LSystem::PullShape () {
 				this->_verts.push_back( vec3f(endP) );
 
 				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
-				this->_colors.push_back(vec3f(0.0f, 1.0f, 0.0f));
+				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
 
 				// Change the state to the new turtle position.
 				this->tState = translate( vec3f(endP) );
+
+				justDrew = !justDrew;
 				break;
 			}
 		}
