@@ -11,6 +11,7 @@
 
 #include 	"cs237.hxx"
 #include 	<vector>
+#include 	<map>
 using 		namespace std; 
 using 		namespace cs237; 
 
@@ -43,11 +44,13 @@ class LSystem {
 		 * 		- number of derivations,
 		 * 		- all stored derivations,
 		 * 		- angle (in degrees).
-		 */ 
+		 * 		- production rules
+		 */
 		string					axiom;
 		int 					n;
 		vector<string> 			derivations;
 		float 					angle;
+		map<char,string> 		productions;
 
 		/* VISUAL SYSTEM:
 		 * 		- turtle's state,

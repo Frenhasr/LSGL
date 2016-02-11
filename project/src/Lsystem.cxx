@@ -16,8 +16,9 @@ LSystem::LSystem (
 	this->axiom 	= axiom;
 	this->n 		= length;
 	this->angle 	= 90.0f;
-	// derivations 	= new vector<string> ();
-	// turtleTMat	 	= new vector<cs237::mat4f> ();
+
+	this->productions['X'] = "X+Y+";
+	this->productions['Y'] = "-X-Y";
 
 	derivations.push_back(this->axiom);
 	this->DevelopAxiom();
@@ -94,40 +95,18 @@ void LSystem::DevelopAxiom () {
 
 void LSystem::DerivationStep (string str) {
 	string temp = str;
-	//std::cout << "Entering Derivation Step with " << temp << " ";
 	char ch;
-
-	string swap;
 
 	for (int i = 0; i < temp.length(); i++) {
 		ch = temp.at(i);
 
-		/* NOTES:
-			- Replace with dictionary of production rules.
-		 */
-		switch (ch) {
-			case 'X':
-				swap = "X+Y+";
-				temp.replace(i, 1, swap);
-				i += swap.length() - 1;
-				break;
+		auto swap = this->productions.find(ch);
 
-			case 'Y':
-				swap = "-X-Y";
-				temp.replace(i, 1, swap);
-				i += swap.length() - 1;
-				// if ((float)rand() < 0.4) {
-				// 	temp.replace(i, 1, "D[+XV]D[-XV]+X");
-				// 	i += strlen("D[+XV]D[-XV]+X") - 1;
-				// }
-				// else {
-				// 	temp.replace(i, 1, "D[-XV]D[+XV]-X");
-				// 	i += strlen("D[-XV]D[+XV]-X") - 1;
-				// }
-				break;
+		if (swap != this->productions.end()) {
+			cout << swap->second << endl;
 
-			default:
-				break;
+			temp.replace(i, 1, swap->second);
+			i += (swap->second).length() - 1;
 		}
 	}
 
@@ -221,7 +200,7 @@ void LSystem::PullShape () {
 				this->_verts.push_back( vec3f(endP) );
 
 				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
-				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
+				this->_colors.push_back(vec3f(0.0f, 1.0f, 0.0f));
 
 				// Change the state to the new turtle position.
 				this->tState = translate( vec3f(endP) );
