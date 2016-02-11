@@ -26,14 +26,14 @@ enum AXES {
 
 struct View {
 	public:
-		GLFWwindow		*win;		//!< the application window
-		cs237::ShaderProgram  * shader;			//!< the shader program for triangle 
+		GLFWwindow*				win;		//!< the application window
+		cs237::ShaderProgram* 	shader;			//!< the shader program for triangle 
 		
 		cs237::mat4f 	camera; 					//!< the camera matrix 
 		cs237::mat4f 	projectionMat; 			//!< the projection matrix  
 			
-		GLint 			cameraLoc; 					    /*!< the uniform location for camera matrix in the shaders*/ 
-		GLint 			projectionLoc; 					/*!< the uniform location for project view matrix in the shaders*/ 
+		GLint 			viewMatLoc; 					    /*!< the uniform location for camera matrix in the shaders*/ 
+		GLint 			projMatLoc; 					/*!< the uniform location for project view matrix in the shaders*/ 
 		
 		Triangle* 		tri;							/*! \brief a triangle to render to the screen */ 
 		
@@ -42,14 +42,6 @@ struct View {
 		/*! \brief Initialize the view */ 
 		View(int w, int h, GLFWwindow* win); 		
 
-		/* rotate the camera around the look-at point by the given angle (in degrees) */
-		void RotateLeft (float angle);
-
-		/*! rotate the camera up by the given angle (in degrees) */
-		void RotateUp (float angle);
-
-	  /*! move the camera towards the look-at point by the given distance */
-		void Move (float dist);		
 
 		void VTranspose (AXES axis, int mode);
 
@@ -87,6 +79,7 @@ struct View {
 		vec3f 			camPos;   					//!< camera position in world space 
     	vec3f 			camAt;					//!< camera direction in world space
 		vec3f 			camUp;    					//!< camera up vector in world space 
+		vec3f 			camDir;    					//!< camera up vector in world space 
 
 		mat4f 			viewMat;
 		mat4f 			projMat;

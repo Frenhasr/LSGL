@@ -15,7 +15,7 @@ LSystem::LSystem (
 
 	this->axiom 	= axiom;
 	this->n 		= length;
-	this->angle 	= 90;
+	this->angle 	= 90.0f;
 	// derivations 	= new vector<string> ();
 	// turtleTMat	 	= new vector<cs237::mat4f> ();
 
@@ -32,8 +32,8 @@ LSystem::LSystem (
 	// intialize the vertex buffer
 	CS237_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     CS237_CHECK( glBindBuffer (GL_ARRAY_BUFFER, this->buffers[0]) );
-    CS237_CHECK( glBufferData (GL_ARRAY_BUFFER, sizeof(vec3d) * this->_verts.size(), &(this->_verts)[0], GL_DYNAMIC_DRAW) );
-    CS237_CHECK( glVertexAttribPointer (0, 3, GL_DOUBLE, GL_FALSE, sizeof(vec3d), 0) );
+    CS237_CHECK( glBufferData (GL_ARRAY_BUFFER, sizeof(vec3f) * this->_verts.size(), &(this->_verts)[0], GL_DYNAMIC_DRAW) );
+    CS237_CHECK( glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3f), 0) );
     CS237_CHECK( glEnableVertexAttribArray (0) );
 
 	// initialize the color buffer
@@ -58,7 +58,7 @@ void LSystem::UpdateVBO ()
 
 	CS237_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	CS237_CHECK( glBindBuffer (GL_ARRAY_BUFFER, this->buffers[0]) );
-	CS237_CHECK( glBufferSubData (GL_ARRAY_BUFFER, 0, sizeof(vec3d) * this->_verts.size(), &(this->_verts)[0]) );
+	CS237_CHECK( glBufferSubData (GL_ARRAY_BUFFER, 0, sizeof(vec3f) * this->_verts.size(), &(this->_verts)[0]) );
 
 	CS237_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
@@ -97,6 +97,8 @@ void LSystem::DerivationStep (string str) {
 	//std::cout << "Entering Derivation Step with " << temp << " ";
 	char ch;
 
+	string swap;
+
 	for (int i = 0; i < temp.length(); i++) {
 		ch = temp.at(i);
 
@@ -105,13 +107,15 @@ void LSystem::DerivationStep (string str) {
 		 */
 		switch (ch) {
 			case 'X':
-				temp.replace(i, 1, "X+Y+");
-				i += strlen("X+Y+") - 1;
+				swap = "X+Y+";
+				temp.replace(i, 1, swap);
+				i += swap.length() - 1;
 				break;
 
 			case 'Y':
-				temp.replace(i, 1, "-X-Y");
-				i += strlen("-X-Y") - 1;
+				swap = "-X-Y";
+				temp.replace(i, 1, swap);
+				i += swap.length() - 1;
 				// if ((float)rand() < 0.4) {
 				// 	temp.replace(i, 1, "D[+XV]D[-XV]+X");
 				// 	i += strlen("D[+XV]D[-XV]+X") - 1;
@@ -178,10 +182,13 @@ void LSystem::PullShape () {
 	 */
 	char 		letter;
 	string 		der = this->derivations.back();
+	vec3f startP;
+	vec4f endP;
+	vec4f offsetL = vec4f(1.0f, 0.0f, 0.0f, 1.0f);
 
 	for (int i = 0; i < der.length(); i++) {
 		letter = der.at(i);
-
+		cout << letter << endl;
 		switch (letter) {
 			/* STACK OPERATIONS
 			 * 		[ 	-> 	push current turtle state
@@ -203,20 +210,21 @@ void LSystem::PullShape () {
 			case 'Y': {
 				// Note: The current rotation is included, and would not affect the starting point.
 				// Start point.
-				float scale = 1.5f;
-				vec4f offsetL = vec4f(1.0f, 0.0f, 0.0f, 1.0f);
 
-				vec4f startP = this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f);
-				this->_verts.push_back( vec3f(startP) );
+				if (this->_verts.size() != 0)
+					startP = this->_verts.back();
+				else
+					startP = vec3f(this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f));
+				this->_verts.push_back( startP );
 				// End point.
-				vec4f endP =  this->tState * this->tOrientation.toMat4x4() * offsetL;
+				endP =  this->tState * this->tOrientation.toMat4x4() * offsetL;
 				this->_verts.push_back( vec3f(endP) );
 
 				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
 				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
 
 				// Change the state to the new turtle position.
-				this->tState = this->tState * translate( vec3f(endP) );
+				this->tState = translate( vec3f(endP) );
 				break;
 			}
 			/* TURTLE ORIENTATION:
@@ -230,7 +238,6 @@ void LSystem::PullShape () {
 			 */
 			case '+':
 				this->tOrientation = this->tOrientation * quatf(this->angle, vec3f(0.0f, 0.0f, 1.0f));
-				//cout << this->tOrientation << endl;
 				break;
 			case '-':
 				this->tOrientation = this->tOrientation * quatf(-this->angle, vec3f(0.0f, 0.0f, 1.0f));

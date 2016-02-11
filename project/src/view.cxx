@@ -45,6 +45,7 @@ View::View (int w, int h, GLFWwindow *win) {
 
 	this->camPos	= vec3f(1.0, 2, -3);
 	this->camAt		= vec3f(0.0, 0.0, 0.0);
+	this->camDir 	= normalize(vec3f(0.0, 0.0, 0.0) - this->camPos);
 	this->camUp		= vec3f(0.0, 1.0, 0.0);
 
 	this->camRot	= cs237::mat4f(1.0f);
@@ -78,8 +79,8 @@ void View::InitShaders() {
 	}
 	
 	//#2 Retrieve the uniform locations for the model and projection matrices 
-	cameraLoc = shader->UniformLocation("camera"); 
-	projectionLoc = shader->UniformLocation("projection");
+	viewMatLoc = shader->UniformLocation("viewMat"); 
+	projMatLoc = shader->UniformLocation("projMat");
 }
 
 
@@ -100,42 +101,11 @@ void View::InitProjMatrix () {
 
 
 void View::InitViewMatrix () {
-	cs237::mat4f mvMat = cs237::lookAt (
-		this->camPos,
-		this->camAt,
+	this->viewMat = cs237::lookAt (
+		camPos,
+		this->camDir + this->camPos,
 		this->camUp
 		);
-
-	// apply rotation followed by translation
-	this->viewMat = mvMat * cs237::translate(cs237::vec3f(
-		0.0f,
-		0.0f, 
-		this->camOffset)) * this->camRot;
-}
-
-
-/* rotate the camera around the look-at point by the given angle (in degrees)
- */
-void View::RotateLeft (float angle) {
-	this->camRot = rotateY(-angle) * this->camRot;
-}
-
-/* rotate the camera up by the given angle (in degrees)
- */
-void View::RotateUp (float angle) {
-	this->camRot = rotateX(angle) * this->camRot;
-}
-
-/* move the camera towards the look-at point by the given distance
- */
-void View::Move (float dist)
-{
-	if (dist < 0.0f)  // move away from camera
-		this->camOffset = max(this->minOffset, this->camOffset - dist);
-	else // move toward camera
-		this->camOffset = min(this->maxOffset, this->camOffset - dist);
-
-	cout << "Moved" << endl;
 }
 
 
@@ -148,7 +118,7 @@ void View::upAxis(){
 		ramy 		= true;
 	}
 	if (!ramz) {
-		amz 		= this->camAt;
+		amz 		= this->camDir;
 		amz 		= normalize(amz);
 		rRz = rTz 	= false;
 		ramz 		= true;
@@ -216,8 +186,9 @@ void View::upAxis(){
 			ramx = ramy = false;
 			break;
 	}
-	this->camAt = vec3f(updateM * vec4f(this->camAt, 0.0f));
-	this->camUp = vec3f(updateM * vec4f(this->camUp,0.0f));
+
+	this->camDir = vec3f(updateM * vec4f(this->camDir, 0.0f));
+	this->camUp = vec3f(updateM * vec4f(this->camUp, 0.0f));
  }
 
 
@@ -257,7 +228,7 @@ void View::VTranspose (AXES axis, int mode) {
 			break;
 
 		case Z_AXIS:
-			if (!ramz) 
+			if (!ramz)
 				upAxis();
 			if (!rTz) 
 				Tz = translate(amz * this->stepsize);
@@ -269,7 +240,8 @@ void View::VTranspose (AXES axis, int mode) {
 			}
 			break;
 	}
-	this->camPos = vec3f(updateM * vec4f(old,1.0));
+
+	this->camPos = vec3f(updateM * vec4f(old, 1.0));
  }
 
 
@@ -281,29 +253,33 @@ void View::InitTriangle() {
 	this->tri->posLoc = shader->AttributeLocation("position");
 	this->tri->colorLoc = shader->AttributeLocation("color");
 
-    this->tree = new LSystem ("X", 0);
+    this->tree 		= new LSystem ("XYY", 9);
 	this->axes		= new Axes(1.5f);
 }
 
 void View::Render() {
-	const GLfloat color[] = { 0.5f, 0.5f , 0.5f, 1.0f}; 
-							
-
 	this->InitViewMatrix();
-	// Clear the screen
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	cout << this->viewMat << endl;
 
-	// Set the background to black 
-	glClearBufferfv(GL_COLOR,0,color); 
+	const GLfloat color[] = { 0.5f, 0.5f , 0.5f, 1.0f};
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearBufferfv(GL_COLOR, 0, color); 
 
 	glEnable(GL_DEPTH_TEST);
+
+	CS237_CHECK(glEnable(GL_LINE_SMOOTH));
+	CS237_CHECK(glEnable(GL_POLYGON_SMOOTH));
+	CS237_CHECK(glHint(GL_LINE_SMOOTH_HINT, GL_NICEST));
+	CS237_CHECK(glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST));
+	CS237_CHECK(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
 	//Begin using the shader program 
 	shader->Use();
 
 	//Pass in the camera and projection matrices 
-	cs237::setUniform(cameraLoc, viewMat);
-	cs237::setUniform(projectionLoc, projMat);
+	cs237::setUniform(viewMatLoc, viewMat);
+	cs237::setUniform(projMatLoc, projMat);
  	
 	if (this->drawAxes) {
 		tri->Render();

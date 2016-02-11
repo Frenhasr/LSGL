@@ -12,12 +12,12 @@ layout(location = 1) in vec4 color;
 
 out vec4 vColor;
 
-uniform mat4 camera; 
-uniform mat4 projection;
+uniform mat4 viewMat; 
+uniform mat4 projMat;
 
 
-void main (void)
-{
-    gl_Position =  projection * camera * vec4(position,1.0); 
+void main (void) {
+
+    gl_Position =  projMat * viewMat * vec4(position, 1.0); 
     vColor = color; 
 }
