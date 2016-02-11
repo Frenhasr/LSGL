@@ -5,6 +5,7 @@
 
 #include "Lsystem.hxx"
 
+#define DEBUG_FLAG       0
 
 /* INITIALIZE LSYSTEM
  */
@@ -86,7 +87,9 @@ void LSystem::tPop () {
  * Takes an axiom and derives it [length] times.
  */
 void LSystem::DevelopAxiom () {
-	std::cout << "Developing Axiom" << std::endl;
+	if (DEBUG_FLAG)
+		std::cout << "Developing Axiom" << std::endl;
+
 	int i;
 	for (i = 0; i < this->n; i++) {
 		this->DerivationStep(this->derivations.back());
@@ -103,7 +106,8 @@ void LSystem::DerivationStep (string str) {
 		auto swap = this->productions.find(ch);
 
 		if (swap != this->productions.end()) {
-			cout << swap->second << endl;
+			if (DEBUG_FLAG)
+				cout << swap->second << endl;
 
 			temp.replace(i, 1, swap->second);
 			i += (swap->second).length() - 1;
@@ -111,8 +115,6 @@ void LSystem::DerivationStep (string str) {
 	}
 
 	this->derivations.push_back(temp);
-
-	//std::cout << "exiting with " << temp << std::endl;
 }
 
 /* GRAB Mth DERIVATION
@@ -167,7 +169,10 @@ void LSystem::PullShape () {
 
 	for (int i = 0; i < der.length(); i++) {
 		letter = der.at(i);
-		cout << letter << endl;
+
+		if (DEBUG_FLAG)
+			cout << letter << endl;
+
 		switch (letter) {
 			/* STACK OPERATIONS
 			 * 		[ 	-> 	push current turtle state
@@ -180,32 +185,6 @@ void LSystem::PullShape () {
 				tPop();
 				break;
 
-			/* TURTLE DRAWS
-			 * 		D 	-> 	line
-			 * 		X 	-> 	line
-			 * 		V 	-> 	leaf
-			 */
-			case 'X':
-			case 'Y': {
-				// Note: The current rotation is included, and would not affect the starting point.
-				// Start point.
-
-				if (this->_verts.size() != 0)
-					startP = this->_verts.back();
-				else
-					startP = vec3f(this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f));
-				this->_verts.push_back( startP );
-				// End point.
-				endP =  this->tState * this->tOrientation.toMat4x4() * offsetL;
-				this->_verts.push_back( vec3f(endP) );
-
-				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
-				this->_colors.push_back(vec3f(0.0f, 1.0f, 0.0f));
-
-				// Change the state to the new turtle position.
-				this->tState = translate( vec3f(endP) );
-				break;
-			}
 			/* TURTLE ORIENTATION:
 			 *		+ 	-> 	turn left
 			 * 		- 	-> 	turn right
@@ -240,8 +219,26 @@ void LSystem::PullShape () {
 				this->tOrientation = this->tOrientation * quatf(180.0f, vec3f(0.0f, 0.0f, 1.0f));
 				break;
 
-			default:
+			default: {
+				// Note: Assume that any other character is a line character. Will have to adjust length, etc.
+				// Warning: This assumes that there are only characters from the alphabet.
+
+				if (this->_verts.size() != 0)
+					startP = this->_verts.back();
+				else
+					startP = vec3f(this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f));
+				this->_verts.push_back( startP );
+				// End point.
+				endP =  this->tState * this->tOrientation.toMat4x4() * offsetL;
+				this->_verts.push_back( vec3f(endP) );
+
+				this->_colors.push_back(vec3f(0.0f, 0.0f, 0.0f));
+				this->_colors.push_back(vec3f(0.0f, 1.0f, 0.0f));
+
+				// Change the state to the new turtle position.
+				this->tState = translate( vec3f(endP) );
 				break;
+			}
 		}
 	}
 }
@@ -253,10 +250,13 @@ void LSystem::Draw () {
 	this->UpdateVBO();
 	for (auto it = this->_verts.begin(); it != this->_verts.end();  ++it) {
 		*it = 3.0f * (*it);
-		cout << *it << endl;
+
+		if (DEBUG_FLAG)
+			cout << *it << endl;
 	}
 
-	std::cout << this->derivations.back() << std::endl;
+	if (DEBUG_FLAG)
+		std::cout << this->derivations.back() << std::endl;
 
 	CS237_CHECK( glBindVertexArray (this->_vaoId) );
 	CS237_CHECK( glDrawArrays (GL_LINES, 0, this->_verts.size()) );

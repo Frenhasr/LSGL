@@ -10,7 +10,9 @@
 #define FOVY		65.0f	/* field-of-view in Y-dimension */
 
 #define MIN_DIST	5.0f
-#define MAX_DIST	200.0f
+#define MAX_DIST	500.0f
+
+#define DEBUG_FLAG       0
 
 /* CONTROL MATRICES
  */
@@ -253,13 +255,14 @@ void View::InitTriangle() {
 	this->tri->posLoc = shader->AttributeLocation("position");
 	this->tri->colorLoc = shader->AttributeLocation("color");
 
-    this->tree 		= new LSystem ("XYY", 9);
+    this->tree 		= new LSystem ("X", 20);
 	this->axes		= new Axes(1.5f);
 }
 
 void View::Render() {
 	this->InitViewMatrix();
-	cout << this->viewMat << endl;
+	if (DEBUG_FLAG)
+		cout << this->viewMat << endl;
 
 	const GLfloat color[] = { 0.5f, 0.5f , 0.5f, 1.0f};
 
