@@ -19,9 +19,16 @@ enum RenderMode {
 };
 
 enum AXES {
+	//*
 	X_AXIS = 0,	
 	Y_AXIS,	
-	Z_AXIS	
+	Z_AXIS
+	//*/
+	/*
+	UP = 0,	
+	FORWARD,	
+	RIGHT
+	//*/
 };
 
 struct View {
@@ -77,9 +84,10 @@ struct View {
 
 		
 		vec3f 			camPos;   					//!< camera position in world space 
-    	vec3f 			camAt;					//!< camera direction in world space
+    	vec3f 			camAt;						//!< camera direction in world space
 		vec3f 			camUp;    					//!< camera up vector in world space 
 		vec3f 			camDir;    					//!< camera up vector in world space 
+		vec3f 			camRight;
 
 		mat4f 			viewMat;
 		mat4f 			projMat;

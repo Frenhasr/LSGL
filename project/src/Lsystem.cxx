@@ -18,8 +18,11 @@ LSystem::LSystem (
 	this->n 		= length;
 	this->angle 	= 90.0f;
 
-	this->productions['X'] = "X+Y+";
-	this->productions['Y'] = "-X-Y";
+	this->productions['X'] = "XX-X-X-X-X-X+X";
+
+	// this->productions['X'] = "X+Y+";
+	// this->productions['Y'] = "-X-Y";
+
 	// this->productions['A'] = "[&FL!A];;;;;'[&FL!A]";
 	// this->productions['F'] = "S;;;;;F";
 	// this->productions['S'] = "FL";

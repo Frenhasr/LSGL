@@ -6,11 +6,11 @@
 
 /* clip planes in world coordinates */
 #define NEAR_Z		0.2f 
-#define FAR_Z		100.0f
+#define FAR_Z		500.0f
 #define FOVY		65.0f	/* field-of-view in Y-dimension */
 
 #define MIN_DIST	5.0f
-#define MAX_DIST	500.0f
+#define MAX_DIST	1500.0f
 
 #define DEBUG_FLAG       0
 
@@ -45,10 +45,11 @@ View::View (int w, int h, GLFWwindow *win) {
 
 	this->needsRedraw = true;
 
-	this->camPos	= vec3f(1.0, 2, -3);
+	this->camPos	= vec3f(1.0, 0, -9.0);
 	this->camAt		= vec3f(0.0, 0.0, 0.0);
 	this->camDir 	= normalize(vec3f(0.0, 0.0, 0.0) - this->camPos);
-	this->camUp		= vec3f(0.0, 1.0, 0.0);
+	this->camRight 	= vec3f(0.0, 0.0, 1.0);
+	this->camUp 	= vec3f(0.0, 1.0, 0.0);//normalize(cross(this->camDir, this->camRight));
 
 	this->camRot	= cs237::mat4f(1.0f);
 	this->camOffset	= 0;
@@ -138,7 +139,37 @@ void View::upAxis(){
  /* ROTATE:
  	For each axis, the function checks if axes or matrices need updates. Then, it uses the mode to choose if rotating "forward" or "backward." Finally, it deactivates the other axes.
   */
- void View::VRotate (AXES axis, int mode) {
+
+/* VROTATE:
+	You either rotate along the camDir (n, m) or along the 
+ */
+
+/*
+void View::VRotate (AXES axis, int mode) {
+	quatf rQ = quatf(0.0f, this->camDir);
+
+	switch (axis) {
+		case UP:
+			rQ = quatf(mode * 30.0f, this->camUp);
+			break;
+		case FORWARD:
+			rQ = quatf(mode * 30.0f, this->camDir);
+			break;
+		case RIGHT:
+			rQ = quatf(mode * 30.0f, this->camRight);
+			break;
+		default:
+			break;
+	}
+
+	this->camDir = vec3f(rQ.toMat4x4() * vec4f(this->camDir, 0.0f));
+	this->camRight = vec3f(rQ.toMat4x4() * vec4f(this->camRight, 0.0f));
+	this->camUp = vec3f(rQ.toMat4x4() * vec4f(this->camUp, 0.0f));
+	this->camPos = vec3f(rQ.toMat4x4() * vec4f(this->camPos, 0.0f));
+}
+//*/
+//*
+void View::VRotate (AXES axis, int mode) {
 	mat4f updateM;
 
 	switch (axis) {
@@ -192,11 +223,35 @@ void View::upAxis(){
 	this->camDir = vec3f(updateM * vec4f(this->camDir, 0.0f));
 	this->camUp = vec3f(updateM * vec4f(this->camUp, 0.0f));
  }
-
+//*/
 
  /* TRANS:
  	For each axis, the function checks if axes or matrices need updates. Then, it uses the mode to choose if  moving forward or backward. Finally, it deactivates the other axes.
   */
+/*
+ void View::VTranspose (AXES axis, int mode) {
+ 	mat4f tM;
+
+ 	switch (axis) {
+ 		case UP:
+ 			tM = translate(mode * this->stepsize * normalize(this->camUp));
+ 			break;
+ 		case FORWARD:
+ 			tM = translate(mode * this->stepsize * normalize(this->camUp));
+ 			break;
+ 		case RIGHT:
+ 			tM = translate(mode * this->stepsize * normalize(this->camRight));
+ 			break;
+ 		default:
+ 			break;
+ 	}
+
+ 	this->camPos 	= vec3f(tM * vec4f(this->camPos, 1.0f));
+ 	this->camAt 	= vec3f(tM * vec4f(this->camAt, 1.0f));
+ 	this->camDir = normalize(vec3f(0.0, 0.0, 0.0) - this->camPos);
+ }
+ //*/
+//*
 void View::VTranspose (AXES axis, int mode) {
 	mat4f updateM;
 	vec3f old = this->camPos;
@@ -245,7 +300,7 @@ void View::VTranspose (AXES axis, int mode) {
 
 	this->camPos = vec3f(updateM * vec4f(old, 1.0));
  }
-
+//*/
 
 
 //! \brief init triangle mesh */
@@ -255,7 +310,7 @@ void View::InitTriangle() {
 	this->tri->posLoc = shader->AttributeLocation("position");
 	this->tri->colorLoc = shader->AttributeLocation("color");
 
-    this->tree 		= new LSystem ("X", 7);
+    this->tree 		= new LSystem ("X-X-X-X", 4);
 	this->axes		= new Axes(1.5f);
 }
 
