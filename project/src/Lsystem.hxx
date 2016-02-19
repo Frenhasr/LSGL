@@ -15,10 +15,22 @@
 using 		namespace std; 
 using 		namespace cs237; 
 
+struct StochasticProduct {
+	float 		probability;
+	string 		product;
+
+	StochasticProduct (
+		float 	prob,
+		string 	prod) {
+		this->probability = prob;
+		this->product = prod;
+	}
+};
+
 //! a class for drawing the XYZ axes
 class LSystem {
 	public:
-		LSystem (string axiom, int length);
+		LSystem (string axiom, int length, float ang);
 		~LSystem ();
 
 		void 	UpdateVBO ();
@@ -46,11 +58,11 @@ class LSystem {
 		 * 		- angle (in degrees).
 		 * 		- production rules
 		 */
-		string					axiom;
-		int 					n;
-		vector<string> 			derivations;
-		float 					angle;
-		map<char,string> 		productions;
+		string										axiom;
+		int 										n;
+		vector<string> 								derivations;
+		float 										angle;
+		multimap<char, StochasticProduct*>	productions;
 
 		/* VISUAL SYSTEM:
 		 * 		- turtle's state,

@@ -11,21 +11,29 @@
  */
 LSystem::LSystem (
 	string 	axiom,
-	int 	length
+	int 	length,
+	float 	ang
 	) {
 
 	this->axiom 	= axiom;
 	this->n 		= length;
-	this->angle 	= 90.0f;
+	this->angle 	= ang;
 
-	this->productions['X'] = "XX-X-X-X-X-X+X";
+	// this->productions['X'] = "XX-X-X-X-X-X+X";
 
 	// this->productions['X'] = "X+Y+";
 	// this->productions['Y'] = "-X-Y";
 
-	// this->productions['A'] = "[&FL!A];;;;;'[&FL!A]";
+	// this->productions['A'] = "[&FLA];;;;;[&FLA];;;;;;;[&FLA]";
 	// this->productions['F'] = "S;;;;;F";
 	// this->productions['S'] = "FL";
+
+	// this->productions['F'] = "F[+F]F[-F]F";
+	// vector<StochasticProduct*> r;
+	// r.push_back(new StochasticProduct(1, "F[+F]F[-F]F"));
+
+	this->productions.insert ( pair<char, StochasticProduct*>('F', new StochasticProduct(0.5f, "F[+F]F[-F]F")) );
+	this->productions.insert ( pair<char, StochasticProduct*>('F', new StochasticProduct(0.5f, "F[+F+F]FF")) );
 
 	derivations.push_back(this->axiom);
 	this->DevelopAxiom();
@@ -103,20 +111,36 @@ void LSystem::DevelopAxiom () {
 }
 
 void LSystem::DerivationStep (string str) {
+	srand (time(NULL));
 	string temp = str;
 	char ch;
+	float samp, distributionLoc, p;
+	string swap;
 
 	for (int i = 0; i < temp.length(); i++) {
 		ch = temp.at(i);
 
-		auto swap = this->productions.find(ch);
+		samp = ((float) rand() / (RAND_MAX));
+		distributionLoc = 0.0f;
 
-		if (swap != this->productions.end()) {
-			if (DEBUG_FLAG)
-				cout << swap->second << endl;
+		for (auto it = productions.equal_range(ch).first; it != productions.equal_range(ch).second;  ++it) {
 
-			temp.replace(i, 1, swap->second);
-			i += (swap->second).length() - 1;
+			p = it->second->probability;
+			distributionLoc += p;
+
+			cout << "Current r " << samp << " under " << distributionLoc << endl;
+
+			if (samp <= distributionLoc) {
+				swap = it->second->product;
+
+				// if (DEBUG_FLAG)
+					cout << "Accepted" << swap << endl;
+
+				temp.replace(i, 1, swap);
+				i += (swap).length() - 1;
+
+				break;
+			}
 		}
 	}
 
@@ -236,10 +260,10 @@ void LSystem::PullShape () {
 				// Note: Assume that any other character is a line character. Will have to adjust length, etc.
 				// Warning: This assumes that there are only characters from the alphabet.
 
-				if (this->_verts.size() != 0)
-					startP = this->_verts.back();
-				else
-					startP = vec3f(this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f));
+				// if (this->_verts.size() != 0)
+				// 	startP = this->_verts.back();
+				// else
+				startP = vec3f(this->tState * vec4f(0.0f, 0.0f, 0.0f, 1.0f));
 				this->_verts.push_back( startP );
 				// End point.
 				endP =  this->tState * this->tOrientation.toMat4x4() * offsetL;
