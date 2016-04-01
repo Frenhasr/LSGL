@@ -9,11 +9,7 @@ If you want to expand on some of my work for a CMSC 23700 project, please clear 
 
 ## Installation
 
-TODO: Describe the installation process
-
-## Usage
-
-TODO: Write usage instructions
+To install LSGL, simply `git clone https://github.com/Frenhasr/LSGL`. Enter the `project/build` folder, `Make`, and `./LSGL`. A window with the project will open.
 
 ## Contributing
 
@@ -27,7 +23,9 @@ Contribution is appreciated and will be appropriately credited (though I don't e
 
 ## Credits
 
-Special thanks to Professor John Reppy at the University of Chicago for letting me use the cs237 C++ library he implemented.
+Special thanks to Professor John Reppy from the University of Chicago for letting me use the cs237 C++ library (`common` folder).
+
+Special thanks to Zeno Unnold from the University of Chicago for the useful movement controls.
 
 ## License
 
