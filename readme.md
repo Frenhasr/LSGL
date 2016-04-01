@@ -23,9 +23,9 @@ Contribution is appreciated and will be appropriately credited (though I don't e
 
 ## Credits
 
-Special thanks to Professor John Reppy from the University of Chicago for letting me use the cs237 C++ library (`common` folder).
+Special thanks to Professor John Reppy (@JohnReppy) from the University of Chicago for letting me use the cs237 C++ library (`common` folder).
 
-Special thanks to Zeno Unnold from the University of Chicago for the useful movement controls.
+Special thanks to Zeno Unnold (@artificerzeno) from the University of Chicago for the useful movement controls.
 
 ## License
 
