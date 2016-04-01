@@ -1,4 +1,4 @@
-# Lindenmayer System Graphical Language (L.S.G.L.)
+# Lindenmayer Systems for OpenGL (LSGL)
 
 TODO: Write a project description
 
