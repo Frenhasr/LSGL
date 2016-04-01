@@ -1,6 +1,5 @@
 Lsystem.o: ../src/Lsystem.cxx ../src/Lsystem.hxx \
-  ../../common/include/cs237.hxx /usr/local/include/GLFW/glfw3.h \
-  ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237.hxx ../../common/include/cs237-types.hxx \
   ../../common/include/cs237-vec2.hxx \
   ../../common/include/cs237-vec3.hxx \
   ../../common/include/cs237-vec4.hxx \
@@ -32,7 +31,7 @@ Lsystem.o: ../src/Lsystem.cxx ../src/Lsystem.hxx \
   ../../common/include/cs237-sphere.hxx \
   ../../common/include/cs237-window.hxx
 axes.o: ../src/axes.cxx ../src/axes.hxx ../../common/include/cs237.hxx \
-  /usr/local/include/GLFW/glfw3.h ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-types.hxx \
   ../../common/include/cs237-vec2.hxx \
   ../../common/include/cs237-vec3.hxx \
   ../../common/include/cs237-vec4.hxx \
@@ -64,7 +63,7 @@ axes.o: ../src/axes.cxx ../src/axes.hxx ../../common/include/cs237.hxx \
   ../../common/include/cs237-sphere.hxx \
   ../../common/include/cs237-window.hxx
 main.o: ../src/main.cxx ../../common/include/cs237.hxx \
-  /usr/local/include/GLFW/glfw3.h ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-types.hxx \
   ../../common/include/cs237-vec2.hxx \
   ../../common/include/cs237-vec3.hxx \
   ../../common/include/cs237-vec4.hxx \
@@ -98,8 +97,7 @@ main.o: ../src/main.cxx ../../common/include/cs237.hxx \
   ../src/triangle.hxx ../src/vertex.hxx ../src/Lsystem.hxx \
   ../src/axes.hxx
 triangle.o: ../src/triangle.cxx ../src/triangle.hxx \
-  ../../common/include/cs237.hxx /usr/local/include/GLFW/glfw3.h \
-  ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237.hxx ../../common/include/cs237-types.hxx \
   ../../common/include/cs237-vec2.hxx \
   ../../common/include/cs237-vec3.hxx \
   ../../common/include/cs237-vec4.hxx \
@@ -131,7 +129,7 @@ triangle.o: ../src/triangle.cxx ../src/triangle.hxx \
   ../../common/include/cs237-sphere.hxx \
   ../../common/include/cs237-window.hxx ../src/vertex.hxx
 view.o: ../src/view.cxx ../src/view.hxx ../../common/include/cs237.hxx \
-  /usr/local/include/GLFW/glfw3.h ../../common/include/cs237-types.hxx \
+  ../../common/include/cs237-types.hxx \
   ../../common/include/cs237-vec2.hxx \
   ../../common/include/cs237-vec3.hxx \
   ../../common/include/cs237-vec4.hxx \

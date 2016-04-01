@@ -310,7 +310,7 @@ void View::InitTriangle() {
 	this->tri->posLoc = shader->AttributeLocation("position");
 	this->tri->colorLoc = shader->AttributeLocation("color");
 
-    this->tree 		= new LSystem ("F", 5, 25.7f);
+    this->tree 		= new LSystem ("F", 5, 10.7f);
 	this->axes		= new Axes(1.5f);
 }
 

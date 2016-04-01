@@ -32,8 +32,8 @@ LSystem::LSystem (
 	// vector<StochasticProduct*> r;
 	// r.push_back(new StochasticProduct(1, "F[+F]F[-F]F"));
 
-	this->productions.insert ( pair<char, StochasticProduct*>('F', new StochasticProduct(0.5f, "F[+F]F[-F]F")) );
-	this->productions.insert ( pair<char, StochasticProduct*>('F', new StochasticProduct(0.5f, "F[+F+F]FF")) );
+	this->productions.insert ( pair<char, StochasticProduct*>('F', new StochasticProduct(0.5f, "&F[+F]F[-;F]F")) );
+	this->productions.insert ( pair<char, StochasticProduct*>('F', new StochasticProduct(0.5f, "F[+F&&+F]FF")) );
 
 	derivations.push_back(this->axiom);
 	this->DevelopAxiom();
