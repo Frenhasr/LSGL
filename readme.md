@@ -11,6 +11,12 @@ If you want to expand on some of my work for a CMSC 23700 project, please clear 
 
 To install LSGL, simply `git clone https://github.com/Frenhasr/LSGL`. Enter the `project/build` folder, `Make`, and `./LSGL`. A window with the project will open.
 
+## Examples
+
+Below are two generated trees (tumble weed-like systems in this case), using the same grammar, to showcase the stochastic capability.
+
+[[https://github.com/Frenhasr/repository/LSGL/master/imgages/Ex1_Tree1.png|alt=octocat]]
+
 ## Contributing
 
 Contribution is appreciated and will be appropriately credited (though I don't expect anyone contributing).
