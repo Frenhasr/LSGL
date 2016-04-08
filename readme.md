@@ -16,7 +16,7 @@ To install LSGL, simply `git clone https://github.com/Frenhasr/LSGL`. Enter the 
 Below are two generated trees (tumble weed-like systems in this case), using the same grammar, to showcase the stochastic capability.
 
 [[https://github.com/Frenhasr/LSGL/blob/master/images/Ex1_Tree1.png|alt=TreeV1]]
-[[https://github.com/Frenhasr/LSGL/blob/master/images/Ex1_Tree2.png|alt=TreeV2]]
+![alt tag](https://github.com/Frenhasr/LSGL/blob/master/images/Ex1_Tree2.png)
 
 ## Contributing
 
